@@ -16,6 +16,18 @@ class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
       appBar: AppBar(title: Text('Seleziona il tipo di scala')),
       body: Column(
         children: [
+          // Logo in alto
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Image.asset(
+              'assets/images/logohome.png',
+              height: 120,  // Altezza fissa del logo
+              fit: BoxFit.contain,  // Mantiene le proporzioni
+            ),
+          ),
+          // Separatore
+          Divider(height: 20, thickness: 1),
+          // Resto del contenuto
           ...scaleTypes.map((type) => CheckboxListTile(
                 title: Text('Scale $type'),
                 value: selectedScaleTypes.contains(type),
