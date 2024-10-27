@@ -1,0 +1,18 @@
+# Dart/Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.idea/
+.vscode/
+*.iml
+.DS_Store
+.pub/
+.pub-cache/
+coverage/
+doc/
+ios/Flutter/.last_build_id
+.flutter-plugins-dependencies
+.metadata
+pubspec.lock

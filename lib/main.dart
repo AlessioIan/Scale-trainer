@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'scale_type_selection_page.dart';
+import 'home_page.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Scale Trainer',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ScaleTypeSelectionPage(),
-    );
-  }
+  runApp(MaterialApp(
+    title: 'Scale Trainer',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: HomePage(),
+  ));
 }
