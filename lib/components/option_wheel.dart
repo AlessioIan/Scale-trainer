@@ -51,11 +51,11 @@ class OptionWheel extends StatelessWidget {
               height: isSelected ? 80 : 50,   // Altezza aumentata per l'elemento selezionato
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Colors.blue.withOpacity(0.2)
+                    ? Theme.of(context).primaryColor.withOpacity(0.2)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
-                  color: isSelected ? Colors.blue : Colors.transparent,
+                  color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
                   width: 2,
                 ),
               ),
@@ -65,7 +65,7 @@ class OptionWheel extends StatelessWidget {
                 style: TextStyle(
                   fontSize: isSelected ? 32 : 18,  // Font size aumentato per l'elemento selezionato
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? Colors.blue : Colors.black87,
+                  color: isSelected ? Theme.of(context).primaryColor : Colors.black87,
                 ),
               ),
             );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'quiz_page.dart';
 
 class GradeSelectionPage extends StatefulWidget {
@@ -11,6 +13,21 @@ class GradeSelectionPage extends StatefulWidget {
 
 class _GradeSelectionPageState extends State<GradeSelectionPage> {
   final selectedDegrees = <int>{};
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  Future<void> playSwishSound() async {
+    try {
+      await audioPlayer.play(AssetSource('sounds/swish2.mp3'));
+    } catch (e) {
+      print('Errore durante la riproduzione del suono: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,90 +35,100 @@ class _GradeSelectionPageState extends State<GradeSelectionPage> {
       appBar: AppBar(title: Text('Teoria Scale')),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Titolo
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
+                padding: EdgeInsets.symmetric(vertical: 12.0),
                 child: Text(
                   'Seleziona i gradi da allenare',
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
 
-              SizedBox(height: 10),
+              SizedBox(height: 12),
 
-              // Grades options
-              ...List.generate(7, (index) => Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: selectedDegrees.contains(index + 1)
-                          ? Colors.blue
-                          : Colors.grey[300]!,
-                      width: 2,
-                    ),
-                  ),
-                  child: CheckboxListTile(
-                    title: Text(
-                      'Grado ${index + 1}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: selectedDegrees.contains(index + 1)
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+              // Grades options in una ListView compatta
+              Container(
+                height: 400,
+                child: ListView(
+                  children: List.generate(7, (index) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: selectedDegrees.contains(index + 1)
+                              ? Theme.of(context).primaryColor
+                              : Colors.grey[300]!,
+                          width: 2,
+                        ),
+                      ),
+                      child: CheckboxListTile(
+                        title: Text(
+                          'Grado ${index + 1}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: selectedDegrees.contains(index + 1)
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        value: selectedDegrees.contains(index + 1),
+                        onChanged: (bool? value) {
+                          HapticFeedback.lightImpact();
+                          setState(() {
+                            value! ? selectedDegrees.add(index + 1) : selectedDegrees.remove(index + 1);
+                          });
+                        },
+                        activeColor: Theme.of(context).primaryColor,
+                        dense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 70),
                       ),
                     ),
-                    value: selectedDegrees.contains(index + 1),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value! ? selectedDegrees.add(index + 1) : selectedDegrees.remove(index + 1);
-                      });
-                    },
-                    activeColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  )),
                 ),
-              )),
+              ),
 
-              SizedBox(height: 10),
+              SizedBox(height: 16),
 
               // Seleziona tutto button
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                   child: Text(
                     'Seleziona tutto',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 18),
                   ),
-                  onPressed: () => setState(() => selectedDegrees.addAll(List.generate(7, (i) => i + 1))),
+                  onPressed: () {
+                    HapticFeedback.mediumImpact();
+                    playSwishSound();
+                    setState(() => selectedDegrees.addAll(List.generate(7, (i) => i + 1)));
+                  },
                 ),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 16),
 
               // Avanti button
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -111,13 +138,15 @@ class _GradeSelectionPageState extends State<GradeSelectionPage> {
                   child: Text(
                     'Avanti',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                   onPressed: () {
                     if (selectedDegrees.isNotEmpty) {
+                      HapticFeedback.mediumImpact();
+                      playSwishSound();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

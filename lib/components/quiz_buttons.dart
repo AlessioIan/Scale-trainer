@@ -15,7 +15,7 @@ class CheckAnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color buttonColor = Colors.blue;
+    Color buttonColor = Theme.of(context).primaryColor;
     if (answered) {
       buttonColor = isCorrect ? Colors.green : Colors.red;
     }
@@ -60,7 +60,7 @@ class NextQuestionButton extends StatelessWidget {
         onPressed();
       } : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).primaryColor,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),

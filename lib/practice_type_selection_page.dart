@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'grade_selection_page.dart';
+import 'practice_page.dart';
 
-class ScaleTypeSelectionPage extends StatefulWidget {
+class PracticeTypeSelectionPage extends StatefulWidget {
   @override
-  _ScaleTypeSelectionPageState createState() => _ScaleTypeSelectionPageState();
+  _PracticeTypeSelectionPageState createState() => _PracticeTypeSelectionPageState();
 }
 
-class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
+class _PracticeTypeSelectionPageState extends State<PracticeTypeSelectionPage> {
   final scaleTypes = ['Maggiore', 'Minore'];
   final selectedScaleTypes = <String>{};
+  bool hintsEnabled = true;  // Per gli aiuti
   final AudioPlayer audioPlayer = AudioPlayer();
 
   Future<void> playSwishSound() async {
@@ -30,7 +31,7 @@ class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Teoria Scale')),
+      appBar: AppBar(title: Text('Pratica Scale')),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(20.0),
@@ -41,7 +42,7 @@ class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: Text(
-                  'Seleziona la tipologia di scale da allenare',
+                  'Seleziona la tipologia di scale da praticare',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -92,6 +93,40 @@ class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
 
               SizedBox(height: 20),
 
+              // Hints option
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 2,
+                  ),
+                ),
+                child: SwitchListTile(
+                  title: Text(
+                    'Aiuti abilitati',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Ricevi suggerimenti durante la pratica',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  value: hintsEnabled,
+                  onChanged: (bool value) {
+                    HapticFeedback.lightImpact();
+                    setState(() {
+                      hintsEnabled = value;
+                    });
+                  },
+                  activeColor: Theme.of(context).primaryColor,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
               // Seleziona tutto button
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -141,13 +176,14 @@ class _ScaleTypeSelectionPageState extends State<ScaleTypeSelectionPage> {
                       HapticFeedback.mediumImpact();
                       playSwishSound();
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GradeSelectionPage(
-                            selectedScaleTypes: selectedScaleTypes.toList(),
-                          ),
+                       context,
+                       MaterialPageRoute(
+                        builder: (context) => PracticePage(
+                         selectedScaleTypes: selectedScaleTypes.toList(),
+                          hintsEnabled: hintsEnabled,
                         ),
-                      );
+                       ),
+                      );                                      
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Seleziona almeno un tipo di scala')),
